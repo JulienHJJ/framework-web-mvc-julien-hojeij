@@ -1,10 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Livres</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"], input[type="submit"] {
+            padding: 6px;
+            margin-right: 10px;
+        }
+        .btn-modifier, .btn-supprimer, .btn-sauvegarder, .btn-annuler {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-supprimer {
+            background-color: #dc3545;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleFields(formId) {
+            var form = document.getElementById(formId);
+            var inputs = form.querySelectorAll('input[type="text"]');
+            inputs.forEach(function(input) {
+                input.classList.toggle('hidden');
+            });
+            form.querySelector('.btn-sauvegarder').classList.toggle('hidden');
+            form.querySelector('.btn-annuler').classList.toggle('hidden');
+            form.querySelector('.btn-modifier').classList.toggle('hidden');
+        }
+    </script>
 </head>
 <body>
+
+<h1>Liste des Livres</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for livre in livres %}
+        <tr>
+            <td>{{ livre.titre }}</td>
+            <td>{{ livre.auteur }}</td>
+            <td class="actions">
+                <form id="form{{ livre.id }}" action="/modifier/{{ livre.id }}" method="POST">
+                    <input type="text" name="nouveau_titre" placeholder="Nouveau titre" class="hidden">
+                    <input type="text" name="nouveau_auteur" placeholder="Nouvel auteur" class="hidden">
+                    <button type="button" class="btn-modifier" onclick="toggleFields('form{{ livre.id }}')">Modifier</button>
+                    <button type="submit" class="btn-sauvegarder hidden">Sauvegarder</button>
+                    <button type="button" class="btn-annuler hidden" onclick="toggleFields('form{{ livre.id }}')">Annuler</button>
+                </form>
+                <form action="/supprimer/{{ livre.id }}" method="POST">
+                    <button type="submit" class="btn-supprimer">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form action="/ajouter" method="POST">
+    <input type="text" name="titre" placeholder="Titre du livre">
+    <input type="text" name="auteur" placeholder="Auteur du livre">
+    <input type="submit" value="Ajouter">
+</form>
 
 </body>
 </html>
