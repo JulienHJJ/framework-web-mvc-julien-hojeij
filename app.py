@@ -1,6 +1,8 @@
 from flask import Flask
+from crud import LivreRepository
 
 app = Flask(__name__)
+repo_livre = LivreRepository()
 
 
 @app.route('/')
