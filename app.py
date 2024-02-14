@@ -19,7 +19,11 @@ def ajouter_livre():
 def modifier_livre(id):
     nouveau_titre = request.form['nouveau_titre']
     nouveau_auteur = request.form['nouveau_auteur']
-    repo_livre.mettre_a_jour(id, nouveau_titre, nouveau_auteur)
+    livre = repo_livre.lire_par_id(id)
+    if nouveau_titre:
+        livre.titre = nouveau_titre
+    if nouveau_auteur:
+        livre.auteur = nouveau_auteur
     return redirect('/')
 
 @app.route('/supprimer/<int:id>', methods=['POST'])
