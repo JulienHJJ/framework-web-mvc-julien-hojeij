@@ -2,11 +2,6 @@ from flask import render_template, request, redirect
 from app import app, db
 from livre import Livre
 
-@app.route('/')
-def index():
-    livres = Livre.query.all()
-    return render_template('affichage_livres.html', livres=livres)
-
 @app.route('/ajouter', methods=['POST'])
 def ajouter_livre():
     titre = request.form['titre']
@@ -15,6 +10,7 @@ def ajouter_livre():
     db.session.add(nouveau_livre)
     db.session.commit()
     return redirect('/')
+
 
 @app.route('/modifier/<int:id>', methods=['POST'])
 def modifier_livre(id):
