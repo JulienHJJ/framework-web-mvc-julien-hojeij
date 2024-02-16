@@ -1,5 +1,6 @@
-class Livre:
-    def __init__(self, id, titre, auteur):
-        self.id = id
-        self.titre = titre
-        self.auteur = auteur
+from app import db
+
+class Livre(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titre = db.Column(db.String(100))
+    auteur = db.Column(db.String(100))
