@@ -58,13 +58,46 @@
 </head>
 <body>
 
-<h1>Liste des Livres</h1>
+<h1>Liste des Genres</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Genre</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for genre in genres %}
+        <tr>
+            <td>{{ genre.nom }}</td>
+            <td class="actions">
+                <form id="form_genre{{ genre.id }}" action="/modifier_genre/{{ genre.id }}" method="POST">
+                    <input type="text" name="nouveau_nom" placeholder="Nouveau Nom" class="hidden">
+                    <button type="button" class="btn-modifier" onclick="toggleFields('form_genre{{ genre.id }}')">Modifier</button>
+                    <button type="submit" class="btn-sauvegarder hidden">Sauvegarder</button>
+                    <button type="button" class="btn-annuler hidden" onclick="toggleFields('form_genre{{ genre.id }}')">Annuler</button>
+                </form>
+                <form action="/supprimer_genre/{{ genre.id }}" method="POST">
+                    <button type="submit" class="btn-supprimer">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<form action="/ajouter_genre" method="POST">
+    <input type="text" name="nom" placeholder="Nom du genre">
+    <input type="submit" value="Ajouter le genre">
+</form>
 
+
+<h1>Liste des Livres</h1>
 <table>
     <thead>
         <tr>
             <th>Titre</th>
             <th>Auteur</th>
+            <th>Genre</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -73,13 +106,18 @@
         <tr>
             <td>{{ livre.titre }}</td>
             <td>{{ livre.auteur }}</td>
+            <td>
+                {% for genre in livre.genres %}
+                    {{ genre.nom }}
+                {% endfor %}
+            </td>
             <td class="actions">
-                <form id="form{{ livre.id }}" action="/modifier/{{ livre.id }}" method="POST">
+                <form id="form_livre{{ livre.id }}" action="/modifier/{{ livre.id }}" method="POST">
                     <input type="text" name="nouveau_titre" placeholder="Nouveau titre" class="hidden">
                     <input type="text" name="nouveau_auteur" placeholder="Nouvel auteur" class="hidden">
-                    <button type="button" class="btn-modifier" onclick="toggleFields('form{{ livre.id }}')">Modifier</button>
+                    <button type="button" class="btn-modifier" onclick="toggleFields('form_livre{{ livre.id }}')">Modifier</button>
                     <button type="submit" class="btn-sauvegarder hidden">Sauvegarder</button>
-                    <button type="button" class="btn-annuler hidden" onclick="toggleFields('form{{ livre.id }}')">Annuler</button>
+                    <button type="button" class="btn-annuler hidden" onclick="toggleFields('form_livre{{ livre.id }}')">Annuler</button>
                 </form>
                 <form action="/supprimer/{{ livre.id }}" method="POST">
                     <button type="submit" class="btn-supprimer">Supprimer</button>
@@ -93,7 +131,12 @@
 <form action="/ajouter" method="POST">
     <input type="text" name="titre" placeholder="Titre du livre">
     <input type="text" name="auteur" placeholder="Auteur du livre">
-    <input type="submit" value="Ajouter">
+    <select name="genre_id">
+        {% for genre in genres %}
+            <option value="{{ genre.id }}">{{ genre.nom }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Ajouter le livre">
 </form>
 
 </body>
