@@ -1,7 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from database import db
 
-# Créez votre table intermédiaire
 livre_genre = db.Table('livre_genre',
     db.Column('livre_id', db.Integer, db.ForeignKey('livre.id'), primary_key=True),
     db.Column('genre_id', db.Integer, db.ForeignKey('genre.id'), primary_key=True)

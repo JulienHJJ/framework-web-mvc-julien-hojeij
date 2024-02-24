@@ -1,6 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask
 from database import db
-from livre import Livre
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
