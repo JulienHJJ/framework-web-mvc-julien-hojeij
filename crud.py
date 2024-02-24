@@ -4,14 +4,23 @@ from app import app
 from livre import Livre
 from livre import Genre
 
+
 @app.route('/ajouter', methods=['POST'])
 def ajouter_livre():
     titre = request.form['titre']
     auteur = request.form['auteur']
+    genre_id = request.form['genre_id']
     nouveau_livre = Livre(titre=titre, auteur=auteur)
     db.session.add(nouveau_livre)
+
+    genre = Genre.query.get(genre_id)
+    if genre:
+        nouveau_livre.genres.append(genre)
     db.session.commit()
-    return redirect('/')
+    livres = Livre.query.all()
+    genres = Genre.query.all()
+
+    return render_template('affichage_livres.html', livres=livres, genres=genres)
 
 
 @app.route('/modifier/<int:id>', methods=['POST'])
@@ -22,6 +31,7 @@ def modifier_livre(id):
     livre.titre = nouveau_titre
     livre.auteur = nouveau_auteur
     db.session.commit()
+    print(Livre.query.all())
     return redirect('/')
 
 @app.route('/supprimer/<int:id>', methods=['POST'])
@@ -37,7 +47,10 @@ def ajouter_genre():
     nouveau_genre = Genre(nom=nom)
     db.session.add(nouveau_genre)
     db.session.commit()
-    return redirect('/')
+    livres = Livre.query.filter(Livre.genres.any(Genre.id == nouveau_genre.id)).all()
+    genres = Genre.query.all()
+
+    return render_template('affichage_livres.html', livres=livres, genres=genres)
 
 @app.route('/modifier_genre/<int:id>', methods=['POST'])
 def modifier_genre(id):

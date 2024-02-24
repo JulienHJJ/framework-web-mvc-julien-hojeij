@@ -16,7 +16,8 @@ with app.app_context():
 @app.route('/')
 def affichage_livres():
     livres = Livre.query.all()
-    return render_template('affichage_livres.html', livres=livres)
+    genres = Genre.query.all()
+    return render_template('affichage_livres.html', livres=livres, genres=genres)
 
 from crud import *
 

@@ -63,6 +63,7 @@
     <thead>
         <tr>
             <th>Genre</th>
+            <th>Livres</th>  <!-- nouvelle colonne -->
             <th>Actions</th>
         </tr>
     </thead>
@@ -70,6 +71,11 @@
         {% for genre in genres %}
         <tr>
             <td>{{ genre.nom }}</td>
+            <td>
+                {% for livre in genre.livres %}
+                    {{ livre.titre }}{% if not loop.last %}, {% endif %}  <!-- lister tous les livres pour ce genre -->
+                {% endfor %}
+            </td>
             <td class="actions">
                 <form id="form_genre{{ genre.id }}" action="/modifier_genre/{{ genre.id }}" method="POST">
                     <input type="text" name="nouveau_nom" placeholder="Nouveau Nom" class="hidden">
