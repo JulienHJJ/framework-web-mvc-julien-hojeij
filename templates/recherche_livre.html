@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <p>Que souhaitez-vous faire ?</p>
+    <ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/affichage_livres">Afficher les livres</a></li>
+    </ul>
+
+    <title>Résultat de la recherche</title>
+</head>
+<body>
+    <h1>Cherchez un livre</h1>
+    <form action="/recherche_livre" method="POST">
+        <input type="text" name="query" placeholder="Entrez le titre ou le mot-clé">
+        <input type="submit" value="Rechercher">
+    </form>
+
+    {% if livre %}
+    <h2>Résultat de la recherche</h2>
+    <div>
+        <h3>{{ livre.titre }}</h3>
+        {% if livre.cover_url %}
+        <img src="{{ livre.cover_url }}" alt="Couverture du livre">
+        {% endif %}
+        <p>Auteur: {{ livre.auteur }}</p>
+        <p>Année de publication: {{ livre.publish_year }}</p>
+        <p>Nombre de pages: {{ livre.num_pages }}</p>
+        <p>ISBN: {{ livre.isbn }}</p>
+        <p>Genre: {{ livre.genre }}</p>
+    </div>
+    <form action="/enregistrer_livre_api" method="POST">
+        <input type="hidden" name="titre" value="{{ livre.titre }}">
+        <input type="hidden" name="auteur" value="{{ livre.auteur }}">
+        <input type="hidden" name="genre" value="{{ livre.genre }}">
+        <input type="submit" value="Enregistrer ce livre">
+    </form>
+    {% else %}
+    <h2>Résultat de la recherche</h2>
+    <p>Aucun livre trouvé pour cette recherche.</p>
+    {% endif %}
+</body>
+</html>

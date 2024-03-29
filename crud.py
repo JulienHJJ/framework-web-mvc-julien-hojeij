@@ -5,6 +5,25 @@ from livre import Livre
 from livre import Genre
 
 
+def enregistrer_livre(titre, auteur, genres):
+    # Recherche des genres existants dans la base de données
+    genres_objets = []
+    for genre_nom in genres:
+        genre = Genre.query.filter_by(nom=genre_nom).first()
+        if not genre:
+            # Si le genre n'existe pas, le créer et l'ajouter à la liste
+            genre = Genre(nom=genre_nom)
+            db.session.add(genre)
+        genres_objets.append(genre)
+
+    # Création du livre
+    livre = Livre(titre=titre, auteur=auteur, genres=genres_objets)
+
+    # Ajout du livre à la base de données
+    db.session.add(livre)
+    db.session.commit()
+    return redirect("/affichage_livres")
+
 @app.route('/ajouter', methods=['POST'])
 def ajouter_livre():
     titre = request.form['titre']
@@ -32,14 +51,14 @@ def modifier_livre(id):
     livre.auteur = nouveau_auteur
     db.session.commit()
     print(Livre.query.all())
-    return redirect('/')
+    return redirect("/affichage_livres")
 
 @app.route('/supprimer/<int:id>', methods=['POST'])
 def supprimer_livre(id):
     livre = Livre.query.get_or_404(id)
     db.session.delete(livre)
     db.session.commit()
-    return redirect('/')
+    return redirect("/affichage_livres")
 
 @app.route('/ajouter_genre', methods=['POST'])
 def ajouter_genre():
@@ -58,11 +77,11 @@ def modifier_genre(id):
     nouveau_nom = request.form['nouveau_nom']
     genre.nom = nouveau_nom
     db.session.commit()
-    return redirect('/')
+    return redirect("/affichage_livres")
 
 @app.route('/supprimer_genre/<int:id>', methods=['POST'])
 def supprimer_genre(id):
     genre = Genre.query.get_or_404(id)
     db.session.delete(genre)
     db.session.commit()
-    return redirect('/')
+    return redirect("/affichage_livres")

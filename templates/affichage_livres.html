@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <p>Que souhaitez-vous faire ?</p>
+    <ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/recherche_livre">Rechercher un livre</a></li>
+    </ul>
+
     <title>Liste des Livres</title>
     <style>
         table {
@@ -73,7 +79,7 @@
             <td>{{ genre.nom }}</td>
             <td>
                 {% for livre in genre.livres %}
-                    {{ livre.titre }}{% if not loop.last %}, {% endif %}  <!-- lister tous les livres pour ce genre -->
+                    {{ livre.titre }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </td>
             <td class="actions">
@@ -91,10 +97,7 @@
         {% endfor %}
     </tbody>
 </table>
-<form action="/ajouter_genre" method="POST">
-    <input type="text" name="nom" placeholder="Nom du genre">
-    <input type="submit" value="Ajouter le genre">
-</form>
+
 
 
 <h1>Liste des Livres</h1>
