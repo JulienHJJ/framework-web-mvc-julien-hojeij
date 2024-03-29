@@ -6,20 +6,15 @@ from livre import Genre
 
 
 def enregistrer_livre(titre, auteur, genres):
-    # Recherche des genres existants dans la base de données
     genres_objets = []
     for genre_nom in genres:
         genre = Genre.query.filter_by(nom=genre_nom).first()
         if not genre:
-            # Si le genre n'existe pas, le créer et l'ajouter à la liste
             genre = Genre(nom=genre_nom)
             db.session.add(genre)
         genres_objets.append(genre)
 
-    # Création du livre
     livre = Livre(titre=titre, auteur=auteur, genres=genres_objets)
-
-    # Ajout du livre à la base de données
     db.session.add(livre)
     db.session.commit()
     return redirect("/affichage_livres")
